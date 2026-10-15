@@ -325,3 +325,10 @@ docker run -d --name voicute-wakeword --restart unless-stopped --network host \
 - 模型升级到 v9.3，误触发率大幅降低
 
 模型版本更新日志见 [models/README.md](models/README.md)。
+
+---
+
+## 许可证
+
+本项目基于 [MIT License](LICENSE) 开源。
+版权所有 © 2026 Voicute。推理引擎完全开源；自定义模型的*训练*是独立的托管服务（voicute.com）。

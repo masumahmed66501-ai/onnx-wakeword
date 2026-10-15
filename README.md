@@ -334,3 +334,10 @@ onnx-wakeword/
 **v9.3 (2026-06)** — Multi-keyword support, English keywords, false-trigger improvements.
 
 See [models/README.md](models/README.md) for model changelog.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+Copyright © 2026 Voicute. Custom model *training* is a separate hosted service at voicute.com — the inference engine itself is fully open source.

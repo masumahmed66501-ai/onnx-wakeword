@@ -211,11 +211,11 @@ onnx-wakeword 是一个只提供推理代码的开源项目，运行时需要兼
 
 ```
 onnx-wakeword/
-├── android/     # Android (Java, ONNX Runtime)
-├── web/         # Web (JavaScript, ONNX Runtime Web)
-├── python/      # Linux / Windows / macOS (Python)
-├── esp32/       # ESP32-S3/P4
-├── wyoming/     # Home Assistant（Wyoming 协议服务）
+├── android/     # Android（Java，ONNX Runtime）
+├── web/         # Web —— 任何现代浏览器（JavaScript，ONNX Runtime Web）
+├── python/      # Linux / Windows / macOS / 树莓派（Python，ONNX Runtime）
+├── esp32/       # ESP32-S3 / ESP32-P4（ESP-IDF，INT8 TFLite）
+├── wyoming/     # Home Assistant —— Wyoming 协议服务（Docker：x86 / NAS / 树莓派）
 ├── ha-addon/    # Home Assistant 加载项
 ├── Dockerfile   # Docker 镜像（voicute/voicute-wyoming）
 └── models/      # 演示模型、多关键词演示包、误触发优化对比模型

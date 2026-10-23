@@ -318,10 +318,10 @@ Full guide (live-mic test, docker-compose, Home Assistant add-on): [`wyoming/REA
 ```
 onnx-wakeword/
 ├── android/     # Android (Java, ONNX Runtime)
-├── web/         # Web (JavaScript, ONNX Runtime Web)
-├── python/      # Linux / Windows / macOS (Python)
-├── esp32/       # ESP32-S3/P4 (ESP-IDF)
-├── wyoming/     # Home Assistant (Wyoming protocol service)
+├── web/         # Web — any modern browser (JavaScript, ONNX Runtime Web)
+├── python/      # Linux / Windows / macOS / Raspberry Pi (Python, ONNX Runtime)
+├── esp32/       # ESP32-S3 / ESP32-P4 (ESP-IDF, INT8 TFLite)
+├── wyoming/     # Home Assistant — Wyoming protocol service (Docker: x86 / NAS / Raspberry Pi)
 ├── ha-addon/    # Home Assistant add-on
 ├── Dockerfile   # Docker image (voicute/voicute-wyoming)
 └── models/      # Demo models, multi-keyword packages, false-trigger optimization pairs

@@ -29,7 +29,7 @@ Audio → Mel features → Keyword TCN model → Matched classification/prototyp
 | Platform | Directory | Entry Point |
 |----------|-----------|-------------|
 | **Web** | [`web/`](web/) | `wakeword.js` → `VoicuteWakeWord.create()` |
-| **Python** | [`python/`](python/) | `wakeword_engine.py` → `WakeWordEngine()` |
+| **Python** | [`python/`](python/) — Linux / Windows / macOS / Raspberry Pi | `wakeword_engine.py` → `WakeWordEngine()` |
 | **Android** | [`android/`](android/) | `WakeWordEngine.java` |
 | **ESP32** | [`esp32/`](esp32/) | ESP-IDF component |
 | **Home Assistant** | [`wyoming/`](wyoming/) | `wyoming_voicute.py` → Wyoming protocol |

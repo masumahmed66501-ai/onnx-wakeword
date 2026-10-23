@@ -227,7 +227,8 @@ onnx-wakeword/
 |------|------|------|
 | Android | `android/` | `WakeWordEngine.java` |
 | Web | `web/` | `wakeword.js` → `VoicuteWakeWord.create()` |
-| Python | `python/` | `wakeword_engine.py` → `WakeWordEngine()` |
+| Python（Windows / macOS / Linux / 树莓派） | `python/` | `wakeword_engine.py` → `WakeWordEngine()` |
+| ESP32 | `esp32/` | ESP-IDF 组件 |
 | Home Assistant | `wyoming/` | `wyoming_voicute.py` → Wyoming 协议 |
 
 ### Web

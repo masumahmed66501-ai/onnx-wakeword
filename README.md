@@ -1,5 +1,7 @@
 # onnx-wakeword — Offline Wake Word & Keyword Spotting Inference Engine
 
+![Enter a keyword, get an offline wake-word model — Voicute](og-image-en.png)
+
 [中文文档](README_CN.md)
 
 `KWS` · `Keyword Spotting` · `Wake Word` · `Custom Wake Word` · `ONNX` · `ESP32` · `Android` · `Home Assistant` · `Wyoming` · `Offline` · `Privacy-First` · `Open Source`
@@ -10,7 +12,7 @@ onnx-wakeword is an open-source, fully offline inference engine for **wake-word 
 
 Train your own custom wake word online ([voicute.com](https://www.voicute.com/?utm_source=github&utm_medium=readme&utm_content=readme_en)), download the resulting model, and run it locally anywhere — browser, desktop, Android, ESP32, Home Assistant. **No audio is uploaded for inference.** Once downloaded, your model works entirely offline with zero ongoing cost.
 
-It provides the complete runtime path from audio preprocessing and Mel feature extraction to model execution, matched-head evaluation, and wake-word detection logic. The runtime is designed primarily for keyword models using a **causal temporal convolutional network (Causal TCN)** with a matched classification or prototype-based head. Fully self-developed training pipeline — not affiliated with Porcupine, OpenWakeWord, or any other project.
+It provides the complete runtime path from audio preprocessing and Mel feature extraction to model execution, matched-head evaluation, and wake-word detection logic. The runtime is designed primarily for keyword models using a **causal temporal convolutional network (Causal TCN)** with a matched classification or prototype-based head. The training pipeline is fully self-developed and purpose-built for custom keywords in 7 languages.
 
 The repository includes ONNX runtimes for Python, Web, and Android, plus an optimized INT8 TFLite runtime for ESP32-S3. All inference runs locally without uploading audio.
 

@@ -1,5 +1,7 @@
 # onnx-wakeword — 离线唤醒词与关键词推理引擎
 
+![输入关键词，约 30 分钟拿到离线唤醒词模型 — 听词 Voicute](og-image.png)
+
 
 `KWS` · `关键词识别` · `唤醒词` · `语音唤醒` · `自定义唤醒词` · `离线语音识别` · `隐私优先` · `不上传音频` · `Keyword Spotting` · `Wake Word` · `ONNX` · `端侧推理` · `ESP32` · `Android` · `Home Assistant` · `Wyoming` · `开源`
 
@@ -9,7 +11,7 @@
 
 onnx-wakeword 是一个开源、完全离线的**唤醒词与关键词检测（KWS）推理引擎**。
 
-项目提供从音频预处理、Mel 特征提取、模型执行、配套分类头计算到唤醒判定的完整运行时，主要面向采用**因果时序卷积网络（Causal TCN）**及配套分类头或原型头的关键词模型。训练管线完全自研，不依赖 Porcupine、OpenWakeWord 或其他第三方项目。
+项目提供从音频预处理、Mel 特征提取、模型执行、配套分类头计算到唤醒判定的完整运行时，主要面向采用**因果时序卷积网络（Causal TCN）**及配套分类头或原型头的关键词模型。训练管线完全自研，专为 7 种语言的自定义关键词打造。
 
 仓库提供 Python、Web、Android 的 ONNX 推理实现，以及针对 ESP32-S3 优化的 INT8 TFLite 推理实现。**所有推理均在本地完成，不需要上传音频**。完整的流程是：在 [voicute.com](https://www.voicute.com/?utm_source=github&utm_medium=readme&utm_content=readme_cn) 在线训练你的自定义关键词模型，下载后在任何支持的平台上离线加载运行。训练一次，永久免费使用，无 API 调用、无月费。
 

@@ -19,7 +19,7 @@
 
 面向采用**因果时序卷积网络（Causal TCN）**及配套分类头/原型头的关键词模型，训练管线完全自研。
 
-- 提供 Python、Web、Android 的 ONNX 推理实现，以及针对 **ESP32-S3 / ESP32-P4** 优化的 INT8 TFLite 推理实现
+- 提供 Python、Web、Android 的 ONNX 推理实现，以及针对 **ESP32-S3** 优化的 INT8 TFLite 推理实现
 - 覆盖浏览器、桌面（Linux / Windows / macOS）、树莓派、Android、ESP32、Home Assistant
 - **推理 100% 本地完成，不上传音频**，无 API 调用、无遥测
 - `models/` 内置 7 种语言演示模型，零成本跑通全流程

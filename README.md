@@ -18,7 +18,7 @@ Audio → Mel features → Keyword TCN model → Matched classification/prototyp
 
 Designed for keyword models built on a **causal temporal convolutional network (Causal TCN)** with a matched classification or prototype-based head. Training pipeline fully self-developed.
 
-- ONNX runtimes for **Python, Web, and Android**, plus an optimized INT8 TFLite runtime for **ESP32-S3 / ESP32-P4**
+- ONNX runtimes for **Python, Web, and Android**, plus an optimized INT8 TFLite runtime for **ESP32-S3**
 - Runs on browser, desktop (Linux / Windows / macOS), Raspberry Pi, Android, ESP32, and Home Assistant
 - **100% local inference — no audio is ever uploaded**, no API calls, no telemetry
 - Demo models in `models/` (7 languages) let you test the full pipeline at zero cost

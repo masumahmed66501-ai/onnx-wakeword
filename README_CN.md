@@ -24,17 +24,16 @@ onnx-wakeword 是一个完全离线的**唤醒词与关键词检测（KWS）推�
 - **推理 100% 本地完成，不上传音频**，无 API 调用、无遥测
 - `models/` 内置 7 种语言演示模型，零成本跑通全流程
 
-## 在线训练平台（[voicute.com](https://www.voicute.com/?utm_source=github&utm_medium=readme&utm_content=readme_cn)）
+## 如何得到一个唤醒词 / 关键词识别模型
 
-在线训练自定义关键词模型，下载后即可在上面任何平台离线运行：
+最快的方式是在 [voicute.com](https://www.voicute.com/?utm_source=github&utm_medium=readme&utm_content=readme_cn) 在线训练：
 
-- **输入任意关键词 → 得到模型**：训练数据全部由 TTS 生成，**无需上传任何录音**（约 30 分钟/词）
-- **可选真人录音增强**：上传少量真人录音，改善模型对真人说话的泛化
-- **一词一模型，或一模型多词**：单个关键词，或一个模型同时识别 2–10+ 个关键词
-- **一键自动困难负样本挖掘**：训练好的模型自动扫描负样本语料找到误触发段并重训——**误触发 −89%~−99%，召回基本不掉**
-- **支持语言**：中文 / English / Deutsch / Français / 日本語 / Español / हिन्दी —— 多语言扩展中
+1. **输入任意关键词**——训练数据全部由 TTS 生成，**无需上传任何录音**（约 30 分钟/词）
+2. *（可选）***上传少量真人录音**——改善模型对真人说话的泛化
+3. *（可选）***一键自动困难负样本挖掘**——训练好的模型自动扫描负样本语料找到误触发段并重训：**误触发 −89%~−99%，召回基本不掉**
+4. **下载 `model.zip`**——单词一模型，或一个模型同时识别 2–10+ 个关键词；在上面任何平台离线加载运行
 
-下载 `model.zip`，在上面任何平台离线加载运行——无 API 调用、无订阅费；授权与定价见 [voicute.com](https://www.voicute.com/pricing?utm_source=github&utm_medium=readme&utm_content=pricing_cn)。
+支持语言：中文 / English / Deutsch / Français / 日本語 / Español / हिन्दी —— 多语言扩展中。下载后无 API 调用、无订阅费；授权与定价见 [voicute.com](https://www.voicute.com/pricing?utm_source=github&utm_medium=readme&utm_content=pricing_cn)。
 
 ## 性能数据
 

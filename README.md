@@ -23,17 +23,16 @@ Designed for keyword models built on a **causal temporal convolutional network (
 - **100% local inference — no audio is ever uploaded**, no API calls, no telemetry
 - Demo models in `models/` (7 languages) let you test the full pipeline at zero cost
 
-## Online Training Platform ([voicute.com](https://www.voicute.com/?utm_source=github&utm_medium=readme&utm_content=readme_en))
+## Getting a Wake Word / KWS Model
 
-Train a custom keyword model online, download it, and run it offline on any platform above:
+The fastest path is training online at [voicute.com](https://www.voicute.com/?utm_source=github&utm_medium=readme&utm_content=readme_en):
 
-- **Type any keyword → get a model.** Training data is generated with TTS — **no recordings required** (~30 min per keyword)
-- **Optional real-voice fine-tuning.** Upload a few user recordings to improve generalization to real speakers
-- **One model, one or many keywords.** Single-keyword models, or one model recognizing 2–10+ keywords
-- **One-click auto hard-negative mining.** The trained model finds its own false triggers in a negative corpus and retrains — **−89% to −99% false triggers, recall preserved**
-- **Languages**: Chinese, English, German, French, Japanese, Spanish, and Hindi — more languages coming
+1. **Enter any keyword** — training data is generated with TTS, **no recordings required** (~30 min per keyword)
+2. *(Optional)* **Upload a few real recordings** — improves generalization to real speakers
+3. *(Optional)* **One-click auto hard-negative mining** — the trained model finds its own false triggers in a negative corpus and retrains: **−89% to −99% false triggers, recall preserved**
+4. **Download `model.zip`** — a single-keyword model, or one model recognizing 2–10+ keywords; load it offline on any platform above
 
-Download the resulting `model.zip`, load it on any platform above, and it runs entirely offline from then on — no API calls, no subscription. See [voicute.com](https://www.voicute.com/pricing?utm_source=github&utm_medium=readme&utm_content=pricing_en) for licensing.
+Supported languages: Chinese, English, German, French, Japanese, Spanish, and Hindi — more languages coming. No API calls, no subscription after download; see [voicute.com](https://www.voicute.com/pricing?utm_source=github&utm_medium=readme&utm_content=pricing_en) for licensing.
 
 ---
 

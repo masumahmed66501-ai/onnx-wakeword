@@ -10,11 +10,23 @@
 
 onnx-wakeword is an open-source, fully offline inference engine for **wake-word detection and keyword spotting (KWS)**.
 
-Train your own custom wake word online ([voicute.com](https://www.voicute.com/?utm_source=github&utm_medium=readme&utm_content=readme_en)), download the resulting model, and run it locally anywhere — browser, desktop, Android, ESP32, Home Assistant. **No audio is uploaded for inference.** Once downloaded, your model works entirely offline with zero ongoing cost.
+### Part 1 — The open-source inference engine (this repository)
 
-It provides the complete runtime path from audio preprocessing and Mel feature extraction to model execution, matched-head evaluation, and wake-word detection logic. The runtime is designed primarily for keyword models using a **causal temporal convolutional network (Causal TCN)** with a matched classification or prototype-based head. The training pipeline is fully self-developed and purpose-built for custom keywords in 7 languages.
+The complete runtime path: audio preprocessing → Mel feature extraction → model execution → matched-head evaluation → wake-word detection logic. Designed for keyword models built on a **causal temporal convolutional network (Causal TCN)** with a matched classification or prototype-based head. The training pipeline is fully self-developed.
 
-The repository includes ONNX runtimes for Python, Web, and Android, plus an optimized INT8 TFLite runtime for ESP32-S3. All inference runs locally without uploading audio.
+- ONNX runtimes for **Python, Web, and Android**, plus an optimized INT8 TFLite runtime for **ESP32-S3 / ESP32-P4**
+- Runs on browser, desktop (Linux / Windows / macOS), Raspberry Pi, Android, ESP32, and Home Assistant
+- **100% local inference — no audio is ever uploaded**, no API calls, no telemetry
+- Demo models in `models/` (7 languages) let you test the full pipeline at zero cost
+
+### Part 2 — The training platform ([voicute.com](https://www.voicute.com/?utm_source=github&utm_medium=readme&utm_content=readme_en))
+
+- **Type any keyword → get a model.** Training data is generated with TTS — **no recordings required** (~30 min per keyword)
+- **Optional real-voice fine-tuning.** Upload a few user recordings to improve generalization to real speakers
+- **One model, one or many keywords.** Single-keyword models, or one model recognizing 2–10+ keywords
+- **One-click auto hard-negative mining.** The trained model finds its own false triggers in a negative corpus and retrains — **−89% to −99% false triggers, recall preserved**
+
+Download the resulting `model.zip`, load it on any platform above, and it runs entirely offline from then on — no API calls, no subscription. See [voicute.com](https://www.voicute.com/pricing?utm_source=github&utm_medium=readme&utm_content=pricing_en) for licensing.
 
 Inference Pipeline
 
@@ -342,4 +354,4 @@ See [models/README.md](models/README.md) for model changelog.
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-Copyright © 2026 Voicute. Custom model *training* is a separate hosted service at voicute.com — the inference engine itself is fully open source.
+Copyright © 2026 Voicute. Custom model *training* is a separate hosted service at voicute.com — the inference engine itself is fully open source. Licensing & pricing: [voicute.com/pricing](https://www.voicute.com/pricing?utm_source=github&utm_medium=readme&utm_content=pricing_en).

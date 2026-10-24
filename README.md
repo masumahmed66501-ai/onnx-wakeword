@@ -8,31 +8,32 @@
 
 > **100% offline · No audio upload · Model < 130KB · ESP32 / Android / Python / Web**
 
-onnx-wakeword is an open-source, fully offline inference engine for **wake-word detection and keyword spotting (KWS)**.
+## Open-Source Inference Engine (this repository)
 
-### Part 1 — The open-source inference engine (this repository)
+onnx-wakeword is a fully offline inference engine for **wake-word detection and keyword spotting (KWS)**. The complete runtime path — audio preprocessing, Mel feature extraction, model execution, matched-head evaluation, and wake-word detection logic:
 
-The complete runtime path: audio preprocessing → Mel feature extraction → model execution → matched-head evaluation → wake-word detection logic. Designed for keyword models built on a **causal temporal convolutional network (Causal TCN)** with a matched classification or prototype-based head. The training pipeline is fully self-developed.
+```text
+Audio → Mel features → Keyword TCN model → Matched classification/prototype head → Detection logic → Result
+```
+
+Designed for keyword models built on a **causal temporal convolutional network (Causal TCN)** with a matched classification or prototype-based head. Training pipeline fully self-developed.
 
 - ONNX runtimes for **Python, Web, and Android**, plus an optimized INT8 TFLite runtime for **ESP32-S3 / ESP32-P4**
 - Runs on browser, desktop (Linux / Windows / macOS), Raspberry Pi, Android, ESP32, and Home Assistant
 - **100% local inference — no audio is ever uploaded**, no API calls, no telemetry
 - Demo models in `models/` (7 languages) let you test the full pipeline at zero cost
 
-### Part 2 — The training platform ([voicute.com](https://www.voicute.com/?utm_source=github&utm_medium=readme&utm_content=readme_en))
+## Online Training Platform ([voicute.com](https://www.voicute.com/?utm_source=github&utm_medium=readme&utm_content=readme_en))
+
+Train a custom keyword model online, download it, and run it offline on any platform above:
 
 - **Type any keyword → get a model.** Training data is generated with TTS — **no recordings required** (~30 min per keyword)
 - **Optional real-voice fine-tuning.** Upload a few user recordings to improve generalization to real speakers
 - **One model, one or many keywords.** Single-keyword models, or one model recognizing 2–10+ keywords
 - **One-click auto hard-negative mining.** The trained model finds its own false triggers in a negative corpus and retrains — **−89% to −99% false triggers, recall preserved**
+- **Languages**: Chinese, English, German, French, Japanese, Spanish, and Hindi — more languages coming
 
 Download the resulting `model.zip`, load it on any platform above, and it runs entirely offline from then on — no API calls, no subscription. See [voicute.com](https://www.voicute.com/pricing?utm_source=github&utm_medium=readme&utm_content=pricing_en) for licensing.
-
-Inference Pipeline
-
-```text
-Audio → Mel features → Keyword TCN model → Matched classification/prototype head → Detection logic → Result
-```
 
 ---
 

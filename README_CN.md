@@ -9,31 +9,32 @@
 
 [:us: English](README.md)
 
-onnx-wakeword 是一个开源、完全离线的**唤醒词与关键词检测（KWS）推理引擎**。
+## 开源推理引擎（本仓库）
 
-### 第一部分 —— 开源推理引擎（本仓库）
+onnx-wakeword 是一个完全离线的**唤醒词与关键词检测（KWS）推理引擎**，提供完整运行时——音频预处理、Mel 特征提取、模型执行、配套分类头计算、唤醒判定：
 
-完整运行时：音频预处理 → Mel 特征提取 → 模型执行 → 配套分类头计算 → 唤醒判定。面向采用**因果时序卷积网络（Causal TCN）**及配套分类头/原型头的关键词模型，训练管线完全自研。
+```text
+音频 → Mel 特征 → 关键词 TCN 模型 → 配套分类头或原型头 → 检测逻辑 → 识别结果
+```
+
+面向采用**因果时序卷积网络（Causal TCN）**及配套分类头/原型头的关键词模型，训练管线完全自研。
 
 - 提供 Python、Web、Android 的 ONNX 推理实现，以及针对 **ESP32-S3 / ESP32-P4** 优化的 INT8 TFLite 推理实现
 - 覆盖浏览器、桌面（Linux / Windows / macOS）、树莓派、Android、ESP32、Home Assistant
 - **推理 100% 本地完成，不上传音频**，无 API 调用、无遥测
 - `models/` 内置 7 种语言演示模型，零成本跑通全流程
 
-### 第二部分 —— 在线训练平台（[voicute.com](https://www.voicute.com/?utm_source=github&utm_medium=readme&utm_content=readme_cn)）
+## 在线训练平台（[voicute.com](https://www.voicute.com/?utm_source=github&utm_medium=readme&utm_content=readme_cn)）
+
+在线训练自定义关键词模型，下载后即可在上面任何平台离线运行：
 
 - **输入任意关键词 → 得到模型**：训练数据全部由 TTS 生成，**无需上传任何录音**（约 30 分钟/词）
 - **可选真人录音增强**：上传少量真人录音，改善模型对真人说话的泛化
 - **一词一模型，或一模型多词**：单个关键词，或一个模型同时识别 2–10+ 个关键词
 - **一键自动困难负样本挖掘**：训练好的模型自动扫描负样本语料找到误触发段并重训——**误触发 −89%~−99%，召回基本不掉**
+- **支持语言**：中文 / English / Deutsch / Français / 日本語 / Español / हिन्दी —— 多语言扩展中
 
 下载 `model.zip`，在上面任何平台离线加载运行——无 API 调用、无订阅费；授权与定价见 [voicute.com](https://www.voicute.com/pricing?utm_source=github&utm_medium=readme&utm_content=pricing_cn)。
-
-### 推理流程
-
-```text
-音频 → Mel 特征 → 关键词 TCN 模型 → 配套分类头或原型头 → 检测逻辑 → 识别结果
-```
 
 ## 性能数据
 

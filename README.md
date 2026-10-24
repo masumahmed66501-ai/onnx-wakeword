@@ -8,9 +8,9 @@
 
 > **100% offline · No audio upload · Model < 130KB · ESP32 / Android / Python / Web**
 
-## Open-Source Inference Engine (this repository)
+## onnx-wakeword is an open-source, fully offline inference engine for wake-word detection and keyword spotting (KWS)
 
-onnx-wakeword is a fully offline inference engine for **wake-word detection and keyword spotting (KWS)**. The complete runtime path — audio preprocessing, Mel feature extraction, model execution, matched-head evaluation, and wake-word detection logic:
+The complete runtime path — audio preprocessing, Mel feature extraction, model execution, matched-head evaluation, and wake-word detection logic:
 
 ```text
 Audio → Mel features → Keyword TCN model → Matched classification/prototype head → Detection logic → Result
@@ -23,14 +23,14 @@ Designed for keyword models built on a **causal temporal convolutional network (
 - **100% local inference — no audio is ever uploaded**, no API calls, no telemetry
 - Demo models in `models/` (7 languages) let you test the full pipeline at zero cost
 
-## Getting a Wake Word / KWS Model
+## How to Get a Wake Word / KWS Model
 
 The fastest path is training online at [voicute.com](https://www.voicute.com/?utm_source=github&utm_medium=readme&utm_content=readme_en):
 
-1. **Enter any keyword** — training data is generated with TTS, **no recordings required** (~30 min per keyword)
+1. **Enter one or more keywords** — training data is generated with TTS, **no recordings required** (~30 min per keyword); you get a single-keyword or multi-keyword model
 2. *(Optional)* **Upload a few real recordings** — improves generalization to real speakers
 3. *(Optional)* **One-click auto hard-negative mining** — the trained model finds its own false triggers in a negative corpus and retrains: **−89% to −99% false triggers, recall preserved**
-4. **Download `model.zip`** — a single-keyword model, or one model recognizing 2–10+ keywords; load it offline on any platform above
+4. **Download `model.zip`** — load it offline on any platform above
 
 Supported languages: Chinese, English, German, French, Japanese, Spanish, and Hindi — more languages coming. No API calls, no subscription after download; see [voicute.com](https://www.voicute.com/pricing?utm_source=github&utm_medium=readme&utm_content=pricing_en) for licensing.
 

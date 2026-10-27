@@ -28,7 +28,7 @@
 #include <math.h>
 #include <string.h>
 
-#define WAKE_WORD  "Hey Robot"
+#define WAKE_WORD  "Hallo Lumo"  // informational only (unused; model resolved by SPIFFS filename)
 #define KWS_HOP    2560   // request a fresh latest window every 160 ms at 16 kHz
 #define CMD_TIMEOUT_MS 6000
 
@@ -105,6 +105,16 @@ static void led_show(uint8_t r, uint8_t g, uint8_t b) {
 typedef enum { STATE_IDLE, STATE_COMMAND } state_t;
 static state_t g_state = STATE_IDLE;
 static int64_t g_cmd_deadline_ms = 0;
+// Event guard windows. The mel window is 1.53 s: right after WAKE the window
+// is still dominated by the wake-word tail, which the CMD head can read as
+// "Licht rot" (observed p=0.71/0.99 on TTS playback) -> swallow CMD events
+// for CMD_GUARD_MS after the transition. Same for WAKE right after a matched
+// command (reset_smooth clears posterior smoothing, not the detect_logic
+// consecutive-frame counter, so a re-fire needs its own guard).
+#define CMD_GUARD_MS  1500
+#define WAKE_GUARD_MS 800
+static int64_t g_cmd_guard_until_ms = 0;
+static int64_t g_wake_guard_until_ms = 0;
 static const char *g_cmd_names[KWS_CMD_N] = {
     "Licht rot", "Licht blau", "Licht grün", "Licht weiß" };
 
@@ -155,13 +165,19 @@ static void leave_cmd(const char *reason, bool led_off) {
     recognizer_reset_smooth();
     if (led_off) led_set_mode(LED_OFF, 0, 0, 0);
     // else: keep whatever the command handler lit up
+    g_wake_guard_until_ms = esp_timer_get_time() / 1000 + WAKE_GUARD_MS;
     ESP_LOGI(TAG, "CMD -> IDLE (%s)", reason);
 }
 
 static void on_wake(voice_event_t ev, voice_evt_data_t d, void *u) {
     (void)ev; (void)d; (void)u;
     if (g_state != STATE_IDLE) return;
+    if (esp_timer_get_time() / 1000 < g_wake_guard_until_ms) {
+        ESP_LOGI(TAG, "[wake] guard: ignored right after CMD -> IDLE");
+        return;
+    }
     g_state = STATE_COMMAND;
+    g_cmd_guard_until_ms = esp_timer_get_time() / 1000 + CMD_GUARD_MS;
     recognizer_set_active(g_idx_wake, 0);
     recognizer_set_active(g_idx_cmd, 1);
     recognizer_reset_smooth();
@@ -173,6 +189,10 @@ static void on_wake(voice_event_t ev, voice_evt_data_t d, void *u) {
 static void on_cmd(voice_event_t ev, voice_evt_data_t d, void *u) {
     (void)ev; (void)d; (void)u;
     if (g_state != STATE_COMMAND || g_cmd_best < 0) return;
+    if (esp_timer_get_time() / 1000 < g_cmd_guard_until_ms) {
+        ESP_LOGI(TAG, "[cmd] guard: wake-word tail still in window");
+        return;
+    }
     int id = g_cmd_best;
     switch (id) {
         case 0: led_set_mode(LED_SOLID, 255, 0, 0); break;     // rot

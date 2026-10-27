@@ -1,11 +1,11 @@
 /*
  * HMI_DevKit_WakeCmd — wake word + follow-up voice commands on the
  * ESP32-S3-HMI-DevKit, mirroring the ESP-IDF demo in
- * onnx-wakeword/esp32/examples/esp32s3_hmi_devkit.
+ * onnx-wakeword/esp32/idf/examples/esp32s3_hmi_devkit.
  *
  *   "Hallo Lumo"                 (hallo_lumo,  mt150) -> command mode, LED blinks blue
  *   "Licht rot/blau/grün/weiß"   (licht_multi, mt150) -> solid LED in the asked color
- *   6 s without a command        -> back to IDLE, LED off
+ *   CMD_TIMEOUT_MS without a cmd -> back to IDLE, LED off (demo 6000, bench 15000)
  *
  * Two embedded models, ONE postprocess dispatcher (library contract:
  * kws_postprocess_fn receives the model index and dispatches per model):
@@ -68,6 +68,16 @@ enum state_t { STATE_IDLE, STATE_COMMAND };
 static state_t g_state = STATE_IDLE;
 #define CMD_TIMEOUT_MS 15000  // bench: extended so the automated speaker test fits; demo default 6000
 static uint32_t g_cmd_deadline_ms = 0;
+// Event guard windows. The mel window is 1.53 s: right after WAKE the window
+// is still dominated by the wake-word tail, which the CMD head can read as
+// "Licht rot" (observed p=0.71/0.99 on TTS playback) -> swallow CMD events
+// for CMD_GUARD_MS after the transition. Same for WAKE right after a matched
+// command (resetSmoothing clears posterior smoothing, not the detect_logic
+// consecutive-frame counter, so a re-fire needs its own guard).
+#define CMD_GUARD_MS  1500
+#define WAKE_GUARD_MS 800
+static uint32_t g_cmd_guard_until_ms = 0;
+static uint32_t g_wake_guard_until_ms = 0;
 // CMD head outputs of the most recent command-model frame (postprocess
 // writes them; onWake — fired later in the same feed() call — reads).
 static float g_cmd_probs[KWS_CMD_N];
@@ -136,6 +146,7 @@ static void leave_cmd(const char *reason, bool led_off) {
     kws.resetSmoothing();
     if (led_off) led_set_mode(LED_OFF, 0, 0, 0);
     // else: keep whatever the command handler lit up
+    g_wake_guard_until_ms = millis() + WAKE_GUARD_MS;
     Serial.printf("CMD -> IDLE (%s)\n", reason);
 }
 
@@ -143,7 +154,12 @@ static void onWake(int idx, const char *word, void *user) {
     (void)word; (void)user;
     if (idx == IDX_WAKE) {
         if (g_state != STATE_IDLE) return;
+        if (millis() < g_wake_guard_until_ms) {
+            Serial.println("[wake] guard: ignored right after CMD -> IDLE");
+            return;
+        }
         g_state = STATE_COMMAND;
+        g_cmd_guard_until_ms = millis() + CMD_GUARD_MS;
         kws.setActive(IDX_WAKE, false);
         kws.setActive(IDX_CMD, true);
         kws.resetSmoothing();
@@ -152,6 +168,10 @@ static void onWake(int idx, const char *word, void *user) {
         Serial.printf("\n>>> WAKE -> CMD mode (Licht rot/blau/grun/weis)\n");
     } else if (idx == IDX_CMD) {
         if (g_state != STATE_COMMAND || g_cmd_best < 0) return;
+        if (millis() < g_cmd_guard_until_ms) {
+            Serial.println("[cmd] guard: wake-word tail still in window");
+            return;
+        }
         int id = g_cmd_best;
         switch (id) {
             case 0: led_set_mode(LED_SOLID, 255, 0, 0);     break;  // rot
@@ -321,13 +341,12 @@ void setup() {
         Serial.println("FATAL: beginEmbedded(hallo_lumo) failed");
         while (true) delay(1000);
     }
-    int n = kws.addEmbedded(licht_multi_tflite, LICHT_MULTI_TFLITE_LEN,
-                            "licht_multi");
-    if (n < 0) {
+    if (!kws.addEmbedded(licht_multi_tflite, LICHT_MULTI_TFLITE_LEN,
+                         "licht_multi")) {
         Serial.println("FATAL: addEmbedded(licht_multi) failed");
         while (true) delay(1000);
     }
-    Serial.printf("models: %d (wake=%d cmd=%d)\n", n, IDX_WAKE, IDX_CMD);
+    Serial.printf("models: %d (wake=%d cmd=%d)\n", kws.numModels(), IDX_WAKE, IDX_CMD);
     Serial.printf("ARENA %p psram=%d free_int=%u largest_int=%u\n",
                   g_kws_arena, g_kws_arena_psram,
                   (unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL),

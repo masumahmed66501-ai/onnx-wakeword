@@ -7,13 +7,33 @@ coexist in one head.h with prefixed symbols:
   KWS_CMD_*   -> command model head weights (consumed by kws_postprocess_cmd)
 The two tflite backbones stay separate files in SPIFFS; only the float heads
 are compiled in, so this packing is the single compile-time merge point.
+Usage: python _merge_heads.py <wake_head.h> <cmd_head.h> [-o OUT]
 """
+import argparse
+import os
 import re
-import sys
 
-HALLO = r"C:\Users\11745\AppData\Local\Temp\de_models\hallolumo\head.h"
-LICHT = r"C:\Users\11745\AppData\Local\Temp\de_models\licht\head.h"
-OUT = r"D:\code\voicute\onnx-wakeword\esp32\examples\esp32s3_hmi_devkit\main\head.h"
+# Inputs are the head.h files extracted from the shipped model zips
+# (onnx-wakeword/models/de/*.zip). Paths default relative to this script and
+# the repo layout, so the tool runs from a fresh clone without edits.
+REPO_ROOT = os.path.normpath(os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", ".."))
+
+def _default_model(name):
+    return os.path.join(REPO_ROOT, "models", "de", name)
+
+ap = argparse.ArgumentParser(
+    description="Merge wake + command model head.h into one firmware header.")
+ap.add_argument("wake_head", nargs="?", default=_default_model("hallolumo_head.h"),
+                help="head.h of the single-head wake model zip")
+ap.add_argument("cmd_head", nargs="?", default=_default_model("licht_head.h"),
+                help="head.h of the multi-keyword command model zip")
+ap.add_argument("-o", "--out", default=os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "head.h"),
+    help="output path (default: main/head.h next to this script)")
+ARGS = ap.parse_args()
+HALLO, LICHT, OUT = ARGS.wake_head, ARGS.cmd_head, ARGS.out
+
 
 WAKE_RENAMES = [
     ("KWS_ABS_TEMP", "KWS_WAKE_ABS_TEMP"),

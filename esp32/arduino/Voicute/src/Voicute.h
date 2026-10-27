@@ -1,7 +1,7 @@
 /*
  * Voicute — Arduino wrapper for the Voicute wake-word inference SDK
  * (Causal DS-TCN INT8 backbone + float MultiProto head, same pipeline as
- * onnx-wakeword/esp32/sdk/voicute).
+ * onnx-wakeword/esp32/idf/voicute).
  *
  * Hardware isolation contract: the library knows NOTHING about boards.
  *   in : int16 PCM, 16 kHz, mono, raw amplitude (NOT divided by 32768)

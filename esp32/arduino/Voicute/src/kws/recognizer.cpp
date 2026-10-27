@@ -13,6 +13,12 @@
 #include "tensorflow/lite/micro/micro_profiler.h"
 
 #define KWS_PROFILE 0
+// 1: periodic mel/quant/output/probability diagnostics over the serial log
+// (VOICUTE_DBG + per-frame "Recognizer:" lines). Off by default: the library
+// stays quiet; sketches print their own prob= telemetry.
+#ifndef KWS_DEBUG
+#define KWS_DEBUG 0
+#endif
 #define KWS_PROFILE_EVERY 40
 #if KWS_PROFILE
 static tflite::MicroProfiler s_profiler;
@@ -227,6 +233,7 @@ void recognizer_run_frame(const int16_t *pcm, float rms, int64_t now_ms) {
                     inp[i] = (int8_t)q;
                 }
             }
+#if KWS_DEBUG
             static int dbg_cnt = 0;
             if (++dbg_cnt >= 5) {
                 dbg_cnt = 0;
@@ -237,6 +244,7 @@ void recognizer_run_frame(const int16_t *pcm, float rms, int64_t now_ms) {
                          n_lo, n_hi, MEL_TIME * MEL_N_MELS,
                          (double)scale, zero_point);
             }
+#endif
             (void)mel_min; (void)mel_max; (void)mel_sum;
             (void)n_lo; (void)n_hi;
         } else {
@@ -302,6 +310,7 @@ void recognizer_run_frame(const int16_t *pcm, float rms, int64_t now_ms) {
             ESP_LOGE("VOICUTE_DBG", "OUT_END");
         }
 #endif
+#if KWS_DEBUG
         static int out_dbg = 0;
         if (++out_dbg >= 5) {
             out_dbg = 0;
@@ -318,6 +327,7 @@ void recognizer_run_frame(const int16_t *pcm, float rms, int64_t now_ms) {
                      (double)model->output_tensor->params.scale,
                      model->output_tensor->params.zero_point);
         }
+#endif
         float prob = 0.0f;
         if (g_cfg.postprocess) {
             prob = g_cfg.postprocess(
@@ -355,6 +365,7 @@ void recognizer_run_frame(const int16_t *pcm, float rms, int64_t now_ms) {
         const char *trigger = dl_evaluate(&g_dl[m], word,
                                           prob_smooth, rms, thr, now_ms);
 
+#if KWS_DEBUG
         // Log every 10 frames, prob>0.05, or trigger; show smoothed prob
         static int cnt = 0; cnt++;
         if (cnt == 1 || cnt % 10 == 0 || prob_smooth > 0.05f || trigger != NULL)
@@ -363,6 +374,7 @@ void recognizer_run_frame(const int16_t *pcm, float rms, int64_t now_ms) {
                      (double)(t_mel_end - t_mel_start) / 1000.0,
                      (double)(t_invoke_end - t_invoke_start) / 1000.0,
                      trigger ? " *TRIG*" : "");
+#endif
 
         // Fire this model's callback if detection pipeline confirmed
         if (trigger != NULL && g_cbs[m]) {

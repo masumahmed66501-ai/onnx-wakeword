@@ -3,7 +3,7 @@
  */
 
 #include "model_loader.h"
-#include "../../examples/esp32s3_hmi_devkit/main/head.h"
+#include "../examples/esp32s3_hmi_devkit/main/head.h"
 #include <string.h>
 #include <stdio.h>
 #include <dirent.h>

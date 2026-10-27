@@ -6,4 +6,4 @@
 
 组件提供 16 kHz PCM 到 Mel 特征处理、INT8 TensorFlow Lite Micro 推理、可配置的模型 head 回调、可选 L1–L5 检测逻辑，以及从 SPIFFS 加载多个模型。
 
-可以通过 `EXTRA_COMPONENT_DIRS` 引入，也可以复制到 ESP-IDF 工程的 `components/` 目录。接口见 [API.md](API.md)，完整运行方式见[板级示例](../../examples/esp32s3_hmi_devkit/README_CN.md)。
+可以通过 `EXTRA_COMPONENT_DIRS` 引入，也可以复制到 ESP-IDF 工程的 `components/` 目录。接口见 [API.md](API.md)，完整运行方式见[板级示例](../examples/esp32s3_hmi_devkit/README_CN.md)。

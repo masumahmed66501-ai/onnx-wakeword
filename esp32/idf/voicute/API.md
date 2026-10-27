@@ -1,6 +1,6 @@
 # Voicute Wake Word API
 
-voicute 是 ESP32 唤醒词检测通用库，位于 `esp32/sdk/voicute/`。
+voicute 是 ESP32 唤醒词检测通用库，位于 `esp32/idf/voicute/`。
 
 ## 架构
 
@@ -185,7 +185,7 @@ float my_postprocess(const int8_t *out, float scale, int zp) {
 ## 目录结构
 
 ```
-esp32/sdk/voicute/                 ← 通用库 (不依赖具体模型)
+esp32/idf/voicute/                 ← 通用库 (不依赖具体模型)
   recognizer.cpp/h                  推理管线
   model_loader.cpp/h                TFLite 模型加载
   mel_extractor.c/h                 mel 特征提取

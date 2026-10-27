@@ -1,6 +1,6 @@
 # Arduino 封装 (VoicuteKWS)
 
-ESP32-S3 唤醒词推理的 Arduino 库，封装 `esp32/sdk/voicute` 推理 SDK。
+ESP32-S3 唤醒词推理的 Arduino 库，封装 `esp32/idf/voicute` 推理 SDK。
 
 - 库本体: [VoicuteKWS/](VoicuteKWS/)（含 vendored TFLM/esp-nn/esp-dsp）
 - 设计与喂料契约: 见 [VoicuteKWS/README.md](VoicuteKWS/README.md)

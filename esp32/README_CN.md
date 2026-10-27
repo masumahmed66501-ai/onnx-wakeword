@@ -6,7 +6,7 @@ Voicute 是面向 ESP32 的自定义离线唤醒词 SDK。可复用推理库与�
 
 ```text
 esp32/
-├── sdk/voicute/                    可复用 ESP-IDF 组件
+├── idf/voicute/                    可复用 ESP-IDF 组件
 └── examples/esp32s3_hmi_devkit/    可直接编译运行的完整示例
 ```
 
@@ -20,8 +20,8 @@ SDK 接收 16 kHz PCM，负责 Mel 特征、INT8 TFLite 推理、模型 head 后
 esp32/
 |-- arduino/VoicuteKWS/             路线 A: Arduino 库, 上手最快
 |   `-- examples/                   HMI_DevKit_Wake / _WakeCmd / _MicDump / _RecDump
-|-- sdk/voicute/                    路线 B: ESP-IDF 可复用组件
-`-- examples/esp32s3_hmi_devkit/    路线 B: 完整 ESP-IDF 工程
+|-- idf/voicute/                    路线 B: ESP-IDF 可复用组件
+`-- idf/examples/esp32s3_hmi_devkit/    路线 B: 完整 ESP-IDF 工程
 ```
 
 | | 路线 A: Arduino | 路线 B: ESP-IDF |
@@ -54,7 +54,7 @@ SDK 可以移植到其他 ESP32-S3 开发板，但需要适配麦克风、Codec 
 
 两个模型都是 mel_time=150 导出（1.532s 窗口，32 mel），已上板验证：噪声环境（rms 150–190）和安静房间（rms 24–36）共 20+ 次唤醒（prob 0.73–1.000）全命中，四色命令零混淆。
 
-编译烧录见[示例说明](examples/esp32s3_hmi_devkit/README_CN.md)（含模型目录说明和两份 head.h 的合并方法），集成见 [SDK 文档](sdk/voicute/README_CN.md)。
+编译烧录见[示例说明](idf/examples/esp32s3_hmi_devkit/README_CN.md)（含模型目录说明和两份 head.h 的合并方法），集成见 [SDK 文档](idf/voicute/README_CN.md)。
 
 ## 模型包（`onnx-wakeword/models/<语言>/`）
 
@@ -77,7 +77,7 @@ models/de/
 └── ...                                 旧 ONNX 产物留作参考
 ```
 
-ESP32 用 `*_tflite.zip` 包。两份 `head.h` 不能直接一起编译（符号名冲突）—— 示例的 `main/_merge_heads.py` 会把它们合并成一个 `main/head.h`（`KWS_WAKE_*` / `KWS_CMD_*` 前缀）。这样合并的所有模型 mel 配置必须一致。详见[示例说明](examples/esp32s3_hmi_devkit/README_CN.md#head-怎么合并main_merge_headspy)。
+ESP32 用 `*_tflite.zip` 包。两份 `head.h` 不能直接一起编译（符号名冲突）—— 示例的 `main/_merge_heads.py` 会把它们合并成一个 `main/head.h`（`KWS_WAKE_*` / `KWS_CMD_*` 前缀）。这样合并的所有模型 mel 配置必须一致。详见[示例说明](idf/examples/esp32s3_hmi_devkit/README_CN.md#head-怎么合并main_merge_headspy)。
 
 ## 实测性能
 
@@ -88,7 +88,7 @@ ESP32 用 `*_tflite.zip` 包。两份 `head.h` 不能直接一起编译（符号
 ## 注意事项
 
 - **换模型必须连 head.h 一起换**：`spiffs_content/*.tflite` 与 `main/head.h` 中的分类器权重、标定常数（`KWS_ABS_TEMP` / `KWS_FC_B`）是配套的，只换一边会导致打分错误。
-- **加长词窗口要同步扩 arena**：`sdk/voicute/model_loader.h` 的 `TFLITE_ARENA_SIZE` 固定 64 KB，98 帧模型实际占用约 43 KB。`main/head.h` 中的 `KWS_MEL_TIME` 可配置（未定义时默认 98），调大（如长词用到 200 帧）时必须按比例扩大 arena，否则模型加载会因内存不足失败。
+- **加长词窗口要同步扩 arena**：`idf/voicute/model_loader.h` 的 `TFLITE_ARENA_SIZE` 固定 64 KB，98 帧模型实际占用约 43 KB。`main/head.h` 中的 `KWS_MEL_TIME` 可配置（未定义时默认 98），调大（如长词用到 200 帧）时必须按比例扩大 arena，否则模型加载会因内存不足失败。
 - **mel_time 不匹配即拒绝加载**：模型输入帧数与 `KWS_MEL_TIME` 不一致时启动即报错，没有静默降级路径——这是刻意设计，便于第一时间发现模型与固件版本错配。
 - **组件下载需要网络**：`idf.py set-target` 会重新解析组件版本，`dependencies.lock` 锁定版本保证可复现。若机器通过系统代理上网，不要在构建脚本里设置 `no_proxy=*` 或清空代理环境变量，否则组件注册表解析会静默失败（表现为 "Component not found" / "no versions match"）。
 - **`patch_led_strip.py` 必须在 `set-target` 之后执行**：set-target 会重新下载 `managed_components/`，把补丁覆盖掉。`build.bat` 已按正确顺序执行，手动操作时不要漏掉这一步。

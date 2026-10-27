@@ -1,7 +1,7 @@
 # VoicuteKWS (Arduino)
 
 Voicute 唤醒词推理库的 Arduino 封装（ESP32-S3）。与 ESP-IDF SDK
-（`esp32/sdk/voicute`）同一条推理管线：mel 前端 → INT8 TFLite Micro backbone
+（`esp32/idf/voicute`）同一条推理管线：mel 前端 → INT8 TFLite Micro backbone
 → MultiProto float 头 → L1–L5 检测门控。
 
 ## 硬件隔离契约
@@ -133,10 +133,10 @@ IDF 组件由 CMake 按目标筛选源文件；Arduino 会编译 `src/` 下所�
 7. **kissfft `tools/` 补回**: `kiss_fft_wrappers/*.cc` 以
    `#include "kiss_fft.c"` 方式编译 kissfft 进 namespace，tools/ 不能裁。
 
-## 已知差异（相对 esp32/sdk/voicute 原版）
+## 已知差异（相对 esp32/idf/voicute 原版）
 
 1. `recognizer_config_t` 新增 `compiled_model / compiled_len / wake_word`
    字段 —— 嵌入式单模型模式（API.md 早已文档化，原代码未实现）。
 2. `recognizer_get_last_mel_ms / _invoke_ms` 诊断接口。
 3. head.h include 路径修复（原版反向 include 了 example 目录）。
-   以上改动验证通过后应双向同步回 `esp32/sdk/voicute`。
+   以上改动验证通过后应双向同步回 `esp32/idf/voicute`。

@@ -12,8 +12,8 @@ Two integration routes, one inference contract (16 kHz PCM -> ONNX-mel -> INT8 T
 esp32/
 |-- arduino/VoicuteKWS/             Route A: Arduino library (fastest bring-up)
 |   `-- examples/                   HMI_DevKit_Wake / _WakeCmd / _MicDump / _RecDump
-|-- sdk/voicute/                    Route B: reusable ESP-IDF component
-`-- examples/esp32s3_hmi_devkit/    Route B: complete tested ESP-IDF application
+|-- idf/voicute/                    Route B: reusable ESP-IDF component
+`-- idf/examples/esp32s3_hmi_devkit/    Route B: complete tested ESP-IDF application
 ```
 
 | | Route A: Arduino | Route B: ESP-IDF |
@@ -54,7 +54,7 @@ on-board: 20+ wakes (prob 0.73–1.000) in noisy (rms 150–190) and quiet
 
 See the [example guide](examples/esp32s3_hmi_devkit/README.md) — including the
 model directory layout and how the two `head.h` files are merged — or the
-[SDK guide](sdk/voicute/README.md).
+[SDK guide](idf/voicute/README.md).
 
 ## Model packages (`onnx-wakeword/models/<lang>/`)
 
@@ -94,7 +94,7 @@ For reference, the older 98-frame models measured ≈ 29 ms Mel + ≈ 40 ms Invo
 ## Important notes
 
 - **Always swap `head.h` together with the model**: the classifier weights and calibration constants (`KWS_ABS_TEMP` / `KWS_FC_B`) in `main/head.h` are matched to the `.tflite` in `spiffs_content/`; replacing only one side produces wrong scores.
-- **Enlarge the tensor arena when raising the window length**: `TFLITE_ARENA_SIZE` in `sdk/voicute/model_loader.h` is fixed at 64 KB, while the bundled 98-frame model uses about 43 KB. `KWS_MEL_TIME` in `main/head.h` is configurable (defaults to 98 when undefined); if you raise it (e.g. 200 frames for long wake words), scale the arena accordingly, otherwise model loading fails for lack of memory.
+- **Enlarge the tensor arena when raising the window length**: `TFLITE_ARENA_SIZE` in `idf/voicute/model_loader.h` is fixed at 64 KB, while the bundled 98-frame model uses about 43 KB. `KWS_MEL_TIME` in `main/head.h` is configurable (defaults to 98 when undefined); if you raise it (e.g. 200 frames for long wake words), scale the arena accordingly, otherwise model loading fails for lack of memory.
 - **A mel_time mismatch refuses to load**: if the model's input frame count differs from `KWS_MEL_TIME`, startup fails fast with an error — there is no silent fallback. This is intentional, so model/firmware mismatches surface immediately.
 - **Component downloads need the network**: `idf.py set-target` re-solves component versions; `dependencies.lock` pins them for reproducibility. On machines that reach the internet through a system proxy, do not set `no_proxy=*` or clear proxy variables in build scripts — the registry lookup then fails silently ("Component not found" / "no versions match").
 - **Run `patch_led_strip.py` after `set-target`**: set-target re-downloads `managed_components/` and wipes the patch. `build.bat` already does this in the right order; don't skip the step in manual builds.

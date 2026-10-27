@@ -20,7 +20,7 @@
 
 // head.h is generated together with the packaged model. Old 98-frame heads
 // remain compatible through the fallback below.
-#include "../../examples/esp32s3_hmi_devkit/main/head.h"
+#include "../examples/esp32s3_hmi_devkit/main/head.h"
 #ifndef KWS_MEL_TIME
 #define KWS_MEL_TIME 98
 #endif

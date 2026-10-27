@@ -6,11 +6,22 @@ Voicute is an offline custom wake-word SDK for ESP32. The reusable inference com
 
 ## Repository layout
 
+Two integration routes, one inference contract (16 kHz PCM -> ONNX-mel -> INT8 TFLite backbone -> float MultiProto head):
+
 ```text
 esp32/
-├── sdk/voicute/                    Reusable ESP-IDF component
-└── examples/esp32s3_hmi_devkit/    Complete tested application
+|-- arduino/VoicuteKWS/             Route A: Arduino library (fastest bring-up)
+|   `-- examples/                   HMI_DevKit_Wake / _WakeCmd / _MicDump / _RecDump
+|-- sdk/voicute/                    Route B: reusable ESP-IDF component
+`-- examples/esp32s3_hmi_devkit/    Route B: complete tested ESP-IDF application
 ```
+
+| | Route A: Arduino | Route B: ESP-IDF |
+|---|---|---|
+| For | Makers, Arduino IDE / arduino-cli | Production firmware, esp-sr AFE pipeline |
+| Audio bring-up | ESP_I2S + vendored ES7210 driver | esp_codec_dev + AFE processor |
+| Models | .tflite compiled into the sketch | .tflite via SPIFFS + srmodels partition |
+| Status | Live-voice verified on HMI DevKit (wake + 4 light commands) | Build-verified on IDF v6.0.1 |
 
 The SDK accepts 16 kHz PCM and performs Mel extraction, INT8 TFLite inference, model-head post-processing, and wake-word detection. Microphone, codec, LED, and ESP-SR AFE handling belong to the example.
 

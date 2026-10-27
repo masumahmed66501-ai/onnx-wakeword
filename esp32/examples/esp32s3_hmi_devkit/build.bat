@@ -21,6 +21,9 @@ set "PATH=%TOOLS_BASE%\tools\ninja\1.12.1;%PATH%"
 set "PATH=%TOOLS_BASE%\tools\xtensa-esp-elf\esp-15.2.0_20251204\xtensa-esp-elf\bin;%PATH%"
 set "PATH=%TOOLS_BASE%\tools\ccache\4.12.1;%PATH%"
 
+set "PYTHONIOENCODING=utf-8"
+REM ESP_ROM_ELF_DIR required by gen_gdbinit.py; bump version if your tools dir differs
+set "ESP_ROM_ELF_DIR=%USERPROFILE%\.espressif\tools\esp-rom-elfs\20241011"
 set http_proxy=
 set https_proxy=
 set no_proxy=*

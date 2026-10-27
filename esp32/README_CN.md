@@ -12,6 +12,25 @@ esp32/
 
 SDK 接收 16 kHz PCM，负责 Mel 特征、INT8 TFLite 推理、模型 head 后处理和唤醒判定。麦克风、Codec、LED 和 ESP-SR AFE 属于板级示例。
 
+## 目录结构
+
+两条集成路线，同一推理契约（16 kHz PCM -> ONNX-mel -> INT8 TFLite -> float MultiProto 头）：
+
+```text
+esp32/
+|-- arduino/VoicuteKWS/             路线 A: Arduino 库, 上手最快
+|   `-- examples/                   HMI_DevKit_Wake / _WakeCmd / _MicDump / _RecDump
+|-- sdk/voicute/                    路线 B: ESP-IDF 可复用组件
+`-- examples/esp32s3_hmi_devkit/    路线 B: 完整 ESP-IDF 工程
+```
+
+| | 路线 A: Arduino | 路线 B: ESP-IDF |
+|---|---|---|
+| 适合 | 创客, Arduino IDE / arduino-cli | 生产固件, esp-sr AFE |
+| 音频 | ESP_I2S + 自带 ES7210 驱动 | esp_codec_dev + AFE |
+| 模型 | .tflite 编译进 sketch | SPIFFS + srmodels 分区 |
+| 状态 | HMI DevKit 真人语音验证（唤醒+4 灯语命令） | IDF v6.0.1 编译验证 |
+
 ## 已测试平台
 
 | 项目 | 实测配置 |

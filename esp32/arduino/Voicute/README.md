@@ -1,4 +1,4 @@
-# VoicuteKWS (Arduino)
+# Voicute (Arduino)
 
 Voicute 唤醒词推理库的 Arduino 封装（ESP32-S3）。与 ESP-IDF SDK
 （`esp32/idf/voicute`）同一条推理管线：mel 前端 → INT8 TFLite Micro backbone
@@ -58,10 +58,10 @@ src/kws/head.h：库用 __has_include(<voicute_head.h>) 优先探测 sketch 目�
 ## 最小示例
 
 ```cpp
-#include <VoicuteKWS.h>
+#include <Voicute.h>
 #include "model_doubaodoubao.h"   // uint8_t doubaodoubao_tflite[] PROGMEM
 
-VoicuteKWS kws;
+Voicute kws;
 
 void setup() {
   Serial.begin(115200);

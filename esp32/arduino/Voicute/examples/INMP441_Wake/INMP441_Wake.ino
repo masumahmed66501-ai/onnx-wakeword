@@ -18,7 +18,7 @@
  * maps to UART0 pins and the USB port stays silent.
  */
 
-#include <VoicuteKWS.h>
+#include <Voicute.h>
 #include <ESP_I2S.h>
 #include "model_doubaodoubao.h"   // same export package as the head in src/kws/head.h
 
@@ -27,7 +27,7 @@
 #define MIC_WS   5
 #define MIC_SD   6
 
-VoicuteKWS kws;
+Voicute kws;
 I2SClass i2s;
 
 void onWake(int idx, const char* word, void* user) {

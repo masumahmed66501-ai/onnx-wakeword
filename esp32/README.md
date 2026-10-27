@@ -10,7 +10,7 @@ Two integration routes, one inference contract (16 kHz PCM -> ONNX-mel -> INT8 T
 
 ```text
 esp32/
-|-- arduino/VoicuteKWS/             Route A: Arduino library (fastest bring-up)
+|-- arduino/Voicute/             Route A: Arduino library (fastest bring-up)
 |   `-- examples/                   HMI_DevKit_Wake / _WakeCmd / _MicDump / _RecDump
 |-- idf/voicute/                    Route B: reusable ESP-IDF component
 `-- idf/examples/esp32s3_hmi_devkit/    Route B: complete tested ESP-IDF application

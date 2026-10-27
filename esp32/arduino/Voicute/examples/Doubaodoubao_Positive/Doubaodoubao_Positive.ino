@@ -2,7 +2,7 @@
  * Doubaodoubao_Positive — positive-path smoke test, no microphone.
  *
  * Feeds a real embedded TTS utterance of the wake word ("doubaodoubao",
- * 1.69 s, 16 kHz mono) straight into VoicuteKWS, exactly like a mic would.
+ * 1.69 s, 16 kHz mono) straight into Voicute, exactly like a mic would.
  * The sliding window (98 mel frames ≈ 1 s) sweeps over the utterance, so
  * prob must rise well above the noise baseline (~0.27) and ideally fire
  * WAKE while the word is inside the window.
@@ -13,7 +13,7 @@
  *         model pair is mismatched).
  */
 
-#include <VoicuteKWS.h>
+#include <Voicute.h>
 #include <esp_log.h>
 #include "model_doubaodoubao.h"
 #include "wav_data.h"
@@ -28,7 +28,7 @@ static int log_to_serial(const char *fmt, va_list args) {
     return 0;
 }
 
-VoicuteKWS kws;
+Voicute kws;
 
 void onWake(int idx, const char* word, void* user) {
     Serial.printf("\n>>> WAKE [%d] %s (prob=%.3f) <<<\n\n",
@@ -41,7 +41,7 @@ void setup() {
     esp_log_set_vprintf(log_to_serial);
     esp_log_level_set("*", ESP_LOG_INFO);
 
-    Serial.println("\n=== VoicuteKWS positive-path test ===");
+    Serial.println("\n=== Voicute positive-path test ===");
     Serial.printf("model: %u bytes, window: %u samples (%.2f s), wav: %u samples (%.2f s)\n",
                   (unsigned)DOUBAO_MODEL_LEN,
                   (unsigned)kws.windowSamples(), kws.windowSamples() / 16000.0f,

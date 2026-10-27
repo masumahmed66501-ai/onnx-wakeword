@@ -18,7 +18,7 @@ SDK 接收 16 kHz PCM，负责 Mel 特征、INT8 TFLite 推理、模型 head 后
 
 ```text
 esp32/
-|-- arduino/VoicuteKWS/             路线 A: Arduino 库, 上手最快
+|-- arduino/Voicute/             路线 A: Arduino 库, 上手最快
 |   `-- examples/                   HMI_DevKit_Wake / _WakeCmd / _MicDump / _RecDump
 |-- idf/voicute/                    路线 B: ESP-IDF 可复用组件
 `-- idf/examples/esp32s3_hmi_devkit/    路线 B: 完整 ESP-IDF 工程

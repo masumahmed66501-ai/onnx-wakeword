@@ -27,7 +27,7 @@
  *
  * Requires the esp32 Arduino core 3.x and "USB CDC On Boot". Serial 115200.
  */
-#include <VoicuteKWS.h>
+#include <Voicute.h>
 #include <ESP_I2S.h>
 #include <Wire.h>
 #include <esp_log.h>
@@ -50,7 +50,7 @@
 #define MIC_GAIN_DB   30.0f  // 37.5 dB is unstable on this board; 30 dB +
                              // ×8 digital boost below is loud and stable
 
-VoicuteKWS kws;
+Voicute kws;
 I2SClass i2s;
 
 // ---- demo models (indices = registration order) ----
@@ -312,7 +312,7 @@ void setup() {
     // The FIRST begin* call fixes the Config AND the postprocess function
     // for every subsequent addEmbedded() — so both models share
     // dispatch_postprocess, which switches on the model index.
-    VoicuteKWS::Config cfg;
+    Voicute::Config cfg;
     cfg.threshold = 0.70f;
     cfg.l1 = false; cfg.l2 = false; cfg.l3 = false;
     cfg.l4 = false; cfg.l5 = false;

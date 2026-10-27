@@ -1,5 +1,5 @@
 /*
- * Doubaodoubao_Synthetic — no-microphone smoke test for VoicuteKWS.
+ * Doubaodoubao_Synthetic — no-microphone smoke test for Voicute.
  *
  * Verifies the full inference chain (model load → mel → TFLite Invoke →
  * postprocess → gates) with synthetic PCM, no mic required:
@@ -20,10 +20,10 @@
  *   --fqbn "esp32:esp32:esp32s3:USBMode=hwcdc,CDCOnBoot=cdc"
  */
 
-#include <VoicuteKWS.h>
+#include <Voicute.h>
 #include "model_doubaodoubao.h"
 
-VoicuteKWS kws;
+Voicute kws;
 
 // Synthetic input: 512-sample blocks (32 ms) of low-level noise. This only
 // exercises the pipeline — it is NOT real speech and must NOT trigger.
@@ -34,7 +34,7 @@ void setup() {
     Serial.begin(115200);
     delay(2000);  // USB-Serial-JTAG takes a moment to re-enumerate
 
-    Serial.println("\n=== VoicuteKWS synthetic smoke test ===");
+    Serial.println("\n=== Voicute synthetic smoke test ===");
     Serial.printf("model: %u bytes, window: %u samples (%.2f s)\n",
                   (unsigned)DOUBAO_MODEL_LEN,
                   (unsigned)kws.windowSamples(), kws.windowSamples() / 16000.0f);

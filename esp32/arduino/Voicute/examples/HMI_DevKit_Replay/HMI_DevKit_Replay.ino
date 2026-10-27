@@ -7,7 +7,7 @@
  * No microphone involved.
  */
 
-#include <VoicuteKWS.h>
+#include <Voicute.h>
 #include <esp_log.h>
 #include "model_doubaodoubao.h"
 #include "wav_data.h"
@@ -20,7 +20,7 @@ static int log_to_serial(const char *fmt, va_list args) {
     return 0;
 }
 
-VoicuteKWS kws;
+Voicute kws;
 
 static void replay(const char* name, const int16_t* data, size_t len) {
     Serial.printf("\n--- replay %s (%u samples) ---\n", name, (unsigned)len);

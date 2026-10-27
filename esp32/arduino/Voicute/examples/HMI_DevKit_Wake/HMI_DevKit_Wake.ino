@@ -19,14 +19,14 @@
  *      value set before enable (mics end up deaf at 0 dB).
  *
  * This sketch is board-specific ON PURPOSE: codec init, pins and channel
- * pick live here. The VoicuteKWS library still only sees int16 PCM.
+ * pick live here. The Voicute library still only sees int16 PCM.
  *
  * Requires the esp32 Arduino core 3.x. Native-USB board: enable
  * "USB CDC On Boot" or `Serial` maps to UART0 and the USB port stays silent.
  * Watch prob/rms in the serial monitor (115200) and say the wake word.
  */
 
-#include <VoicuteKWS.h>
+#include <Voicute.h>
 #include <ESP_I2S.h>
 #include <Wire.h>
 #include <esp_log.h>
@@ -140,7 +140,7 @@ static const audio_codec_if_t *es7210_setup(uint8_t mics, float gain_db) {
     return codec;
 }
 
-VoicuteKWS kws;
+Voicute kws;
 I2SClass i2s;
 
 // ---- audio feeder task (core 0) ----

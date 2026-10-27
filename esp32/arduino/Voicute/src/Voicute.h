@@ -1,5 +1,5 @@
 /*
- * VoicuteKWS — Arduino wrapper for the Voicute wake-word inference SDK
+ * Voicute — Arduino wrapper for the Voicute wake-word inference SDK
  * (Causal DS-TCN INT8 backbone + float MultiProto head, same pipeline as
  * onnx-wakeword/esp32/sdk/voicute).
  *
@@ -24,7 +24,7 @@
 #include "kws/recognizer.h"      // pulls model_loader.h (TFLite Micro) + mel contract
 #include "kws/model_head.h"        // model-specific head: KWS_MEL_TIME, prototypes, ...
 
-class VoicuteKWS {
+class Voicute {
 public:
     // modelIdx, wake word, user data
     typedef void (*WakeCallback)(int modelIdx, const char* word, void* user);
@@ -41,8 +41,8 @@ public:
         float l5Delta = 200.0f;  // 0 → SDK default (1200)
     };
 
-    VoicuteKWS();
-    ~VoicuteKWS();
+    Voicute();
+    ~Voicute();
 
     // ---- Model supply (choose ONE begin*) ----
     // Single model compiled into the firmware. wakeWord names the registry
@@ -106,5 +106,5 @@ private:
     int16_t*   m_frame = nullptr;     // contiguous window handed to the SDK
     WakeCallback m_cb = nullptr;
     void*      m_cbUser = nullptr;
-    struct Bind { VoicuteKWS* self; int idx; } m_bind[MAX_WAKE_WORDS];
+    struct Bind { Voicute* self; int idx; } m_bind[MAX_WAKE_WORDS];
 };

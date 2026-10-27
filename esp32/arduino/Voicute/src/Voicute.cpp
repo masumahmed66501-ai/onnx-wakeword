@@ -1,4 +1,4 @@
-#include "VoicuteKWS.h"
+#include "Voicute.h"
 #include "kws/kws_postprocess.h"
 #include "esp_timer.h"
 
@@ -6,45 +6,45 @@
 // Available in the arduino-esp32 core — it is IDF underneath.
 static inline int64_t nowMs() { return esp_timer_get_time() / 1000LL; }
 
-VoicuteKWS::VoicuteKWS() {
+Voicute::Voicute() {
     for (int i = 0; i < MAX_WAKE_WORDS; i++) { m_bind[i] = {this, i}; }
 }
 
-VoicuteKWS::~VoicuteKWS() {
+Voicute::~Voicute() {
     delete[] m_hist;
     delete[] m_frame;
 }
 
-bool VoicuteKWS::beginEmbedded(const uint8_t* modelTflite, size_t len,
+bool Voicute::beginEmbedded(const uint8_t* modelTflite, size_t len,
                                const char* wakeWord) {
     return beginEmbedded(modelTflite, len, wakeWord, nullptr);
 }
 
-bool VoicuteKWS::beginEmbedded(const uint8_t* modelTflite, size_t len,
+bool Voicute::beginEmbedded(const uint8_t* modelTflite, size_t len,
                                const char* wakeWord,
                                kws_postprocess_fn postprocess) {
     return beginEmbedded(modelTflite, len, wakeWord, postprocess, Config());
 }
 
-bool VoicuteKWS::beginEmbedded(const uint8_t* modelTflite, size_t len,
+bool Voicute::beginEmbedded(const uint8_t* modelTflite, size_t len,
                                const char* wakeWord,
                                kws_postprocess_fn postprocess,
                                const Config& cfg) {
     return init(nullptr, modelTflite, len, wakeWord, postprocess, cfg);
 }
 
-bool VoicuteKWS::beginSpiffs(const char* basePath,
+bool Voicute::beginSpiffs(const char* basePath,
                              kws_postprocess_fn postprocess) {
     return beginSpiffs(basePath, postprocess, Config());
 }
 
-bool VoicuteKWS::beginSpiffs(const char* basePath,
+bool Voicute::beginSpiffs(const char* basePath,
                              kws_postprocess_fn postprocess,
                              const Config& cfg) {
     return init(basePath, nullptr, 0, nullptr, postprocess, cfg);
 }
 
-bool VoicuteKWS::init(const char* basePath, const uint8_t* embeddedModel,
+bool Voicute::init(const char* basePath, const uint8_t* embeddedModel,
                       size_t embeddedLen, const char* wakeWord,
                       kws_postprocess_fn postprocess, const Config& cfg) {
     m_cfg = cfg;
@@ -63,7 +63,7 @@ bool VoicuteKWS::init(const char* basePath, const uint8_t* embeddedModel,
     rc.wake_word      = wakeWord;
     recognizer_start(&rc);
     if (recognizer_num_models() == 0) {
-        Serial.println("[VoicuteKWS] ERROR: no models loaded");
+        Serial.println("[Voicute] ERROR: no models loaded");
         return false;
     }
 
@@ -71,13 +71,13 @@ bool VoicuteKWS::init(const char* basePath, const uint8_t* embeddedModel,
     delete[] m_hist; delete[] m_frame;
     m_hist  = new int16_t[MEL_AUDIO_LEN];
     m_frame = new int16_t[MEL_AUDIO_LEN];
-    if (!m_hist || !m_frame) { Serial.println("[VoicuteKWS] OOM"); return false; }
+    if (!m_hist || !m_frame) { Serial.println("[Voicute] OOM"); return false; }
     memset(m_hist, 0, MEL_AUDIO_LEN * sizeof(int16_t));
     m_wr = m_total = 0;
     m_sinceInfer = 0;
     m_ready = true;
 
-    Serial.printf("[VoicuteKWS] ready: %d model(s), window=%u samples (%.2f s), "
+    Serial.printf("[Voicute] ready: %d model(s), window=%u samples (%.2f s), "
                   "hop=%u, thr=%.2f\n",
                   recognizer_num_models(), (unsigned)MEL_AUDIO_LEN,
                   MEL_AUDIO_LEN / 16000.0f, (unsigned)cfg.hopSamples, cfg.threshold);
@@ -86,14 +86,14 @@ bool VoicuteKWS::init(const char* basePath, const uint8_t* embeddedModel,
     return true;
 }
 
-bool VoicuteKWS::addEmbedded(const uint8_t* modelTflite, size_t len,
+bool Voicute::addEmbedded(const uint8_t* modelTflite, size_t len,
                              const char* wakeWord) {
     if (!m_ready) {
-        Serial.println("[VoicuteKWS] ERROR: addEmbedded() before begin*");
+        Serial.println("[Voicute] ERROR: addEmbedded() before begin*");
         return false;
     }
     if (recognizer_add_model(modelTflite, len, wakeWord) < 0) {
-        Serial.println("[VoicuteKWS] ERROR: addEmbedded() failed");
+        Serial.println("[Voicute] ERROR: addEmbedded() failed");
         return false;
     }
     // If onWake() already ran, bind the new model too (same trampoline).
@@ -101,32 +101,32 @@ bool VoicuteKWS::addEmbedded(const uint8_t* modelTflite, size_t len,
         for (int i = 0; i < recognizer_num_models(); i++)
             recognizer_register_callback(i, sEventTrampoline, &m_bind[i]);
     int i = recognizer_num_models() - 1;
-    Serial.printf("[VoicuteKWS] added model [%d] %s\n", i, recognizer_model_word(i));
+    Serial.printf("[Voicute] added model [%d] %s\n", i, recognizer_model_word(i));
     return true;
 }
 
-void VoicuteKWS::onWake(WakeCallback cb, void* user) {
+void Voicute::onWake(WakeCallback cb, void* user) {
     m_cb = cb; m_cbUser = user;
     for (int i = 0; i < recognizer_num_models(); i++)
         recognizer_register_callback(i, sEventTrampoline, &m_bind[i]);
 }
 
-void VoicuteKWS::sEventTrampoline(voice_event_t ev, voice_evt_data_t data, void* arg) {
+void Voicute::sEventTrampoline(voice_event_t ev, voice_evt_data_t data, void* arg) {
     if (ev != VOICE_EVT_AWAKEN) return;
     Bind* b = (Bind*)arg;
     if (b && b->self && b->self->m_cb)
         b->self->m_cb(b->idx, recognizer_model_word(b->idx), b->self->m_cbUser);
 }
 
-float VoicuteKWS::sDefaultPostprocess(const int8_t* out, float scale, int zero, int idx) {
+float Voicute::sDefaultPostprocess(const int8_t* out, float scale, int zero, int idx) {
     (void)idx;
     return kws_postprocess(out, scale, zero);  // single-head MultiProto head
 }
 
-int VoicuteKWS::numModels() { return recognizer_num_models(); }
-const char* VoicuteKWS::modelWord(int idx) { return recognizer_model_word(idx); }
+int Voicute::numModels() { return recognizer_num_models(); }
+const char* Voicute::modelWord(int idx) { return recognizer_model_word(idx); }
 
-void VoicuteKWS::feed(const int16_t* pcm, size_t n) {
+void Voicute::feed(const int16_t* pcm, size_t n) {
     if (!m_ready || !pcm || n == 0) return;
     for (size_t i = 0; i < n; i++) {
         m_hist[m_wr++] = pcm[i];
@@ -137,7 +137,7 @@ void VoicuteKWS::feed(const int16_t* pcm, size_t n) {
     maybeInfer();
 }
 
-void VoicuteKWS::maybeInfer() {
+void Voicute::maybeInfer() {
     // First inference as soon as the window is full, then at hop cadence.
     // Always on the NEWEST continuous window; no backlog replay.
     bool due = (m_total >= MEL_AUDIO_LEN) &&

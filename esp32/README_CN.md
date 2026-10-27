@@ -6,8 +6,10 @@ Voicute 是面向 ESP32 的自定义离线唤醒词 SDK。可复用推理库与�
 
 ```text
 esp32/
-├── idf/voicute/                    可复用 ESP-IDF 组件
-└── examples/esp32s3_hmi_devkit/    可直接编译运行的完整示例
+├── arduino/Voicute/                路线 A: Arduino 库（上手最快）
+|   `-- examples/                      HMI_DevKit_Wake / _WakeCmd / _MicDump / _RecDump
+├── idf/voicute/                    路线 B: 可复用 ESP-IDF 组件
+└── idf/examples/esp32s3_hmi_devkit/ 路线 B: 可直接编译运行的完整示例
 ```
 
 SDK 接收 16 kHz PCM，负责 Mel 特征、INT8 TFLite 推理、模型 head 后处理和唤醒判定。麦克风、Codec、LED 和 ESP-SR AFE 属于板级示例。
@@ -29,7 +31,7 @@ esp32/
 | 适合 | 创客, Arduino IDE / arduino-cli | 生产固件, esp-sr AFE |
 | 音频 | ESP_I2S + 自带 ES7210 驱动 | esp_codec_dev + AFE |
 | 模型 | .tflite 编译进 sketch | SPIFFS + srmodels 分区 |
-| 状态 | HMI DevKit 真人语音验证（唤醒+4 灯语命令） | IDF v6.0.1 编译验证 |
+| 状态 | HMI DevKit TTS 实测（唤醒+4 灯语命令） | HMI DevKit TTS 实测；IDF v6.0.1 编译 |
 
 ## 已测试平台
 
@@ -54,7 +56,7 @@ SDK 可以移植到其他 ESP32-S3 开发板，但需要适配麦克风、Codec 
 
 两个模型都是 mel_time=150 导出（1.532s 窗口，32 mel），已上板验证：噪声环境（rms 150–190）和安静房间（rms 24–36）共 20+ 次唤醒（prob 0.73–1.000）全命中，四色命令零混淆。
 
-编译烧录见[示例说明](idf/examples/esp32s3_hmi_devkit/README_CN.md)（含模型目录说明和两份 head.h 的合并方法），集成见 [SDK 文档](idf/voicute/README_CN.md)。
+IDF 路线编译烧录见[示例说明](idf/examples/esp32s3_hmi_devkit/README_CN.md)（含模型目录说明和两份 head.h 的合并方法），集成见 [SDK 文档](idf/voicute/README_CN.md)；Arduino 路线见[库说明](arduino/Voicute/README.md)。
 
 ## 模型包（`onnx-wakeword/models/<语言>/`）
 

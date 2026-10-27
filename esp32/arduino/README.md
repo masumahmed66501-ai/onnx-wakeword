@@ -16,6 +16,7 @@ ESP32-S3 唤醒词推理的 Arduino 库，封装 `esp32/idf/voicute` 推理 SDK�
 
 ```bash
 python Voicute/tools/tflite_to_header.py 导出包/xxx.tflite model_xxx.h
-# 把导出包里的 head.h 覆盖 Voicute/src/kws/head.h
+# 把导出包里的 head.h 存到 sketch 目录的 voicute_head.h（库经 __has_include
+# 自动优先加载它，未提供时回落内置的 heads/doubaodoubao.h）
 # sketch 里换成 beginEmbedded(xxx_tflite, XXX_MODEL_LEN, "词名")
 ```

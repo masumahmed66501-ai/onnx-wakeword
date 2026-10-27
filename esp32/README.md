@@ -21,7 +21,7 @@ esp32/
 | For | Makers, Arduino IDE / arduino-cli | Production firmware, esp-sr AFE pipeline |
 | Audio bring-up | ESP_I2S + vendored ES7210 driver | esp_codec_dev + AFE processor |
 | Models | .tflite compiled into the sketch | .tflite via SPIFFS + srmodels partition |
-| Status | Live-voice verified on HMI DevKit (wake + 4 light commands) | Build-verified on IDF v6.0.1 |
+| Status | Live TTS-verified on HMI DevKit (wake + 4 light commands) | Live TTS-verified on HMI DevKit; built with IDF v6.0.1 |
 
 The SDK accepts 16 kHz PCM and performs Mel extraction, INT8 TFLite inference, model-head post-processing, and wake-word detection. Microphone, codec, LED, and ESP-SR AFE handling belong to the example.
 
@@ -52,9 +52,10 @@ Both models are mel_time=150 exports (1.532 s window, 32 mels) and verified
 on-board: 20+ wakes (prob 0.73–1.000) in noisy (rms 150–190) and quiet
 (rms 24–36) rooms, all four colour commands hit with zero confusion.
 
-See the [example guide](examples/esp32s3_hmi_devkit/README.md) — including the
-model directory layout and how the two `head.h` files are merged — or the
-[SDK guide](idf/voicute/README.md).
+For the ESP-IDF route see the [example guide](idf/examples/esp32s3_hmi_devkit/README.md)
+— including the model directory layout and how the two `head.h` files are merged —
+or the [SDK guide](idf/voicute/README.md). For the Arduino route see the
+[library guide](arduino/Voicute/README.md).
 
 ## Model packages (`onnx-wakeword/models/<lang>/`)
 
@@ -83,7 +84,7 @@ compiled together as-is (clashing symbol names) — the example's
 `main/_merge_heads.py` merges them into one `main/head.h` with `KWS_WAKE_*` /
 `KWS_CMD_*` prefixes. All models merged this way must share the same mel
 configuration. Details in the
-[example guide](examples/esp32s3_hmi_devkit/README.md#how-the-heads-are-merged-main_merge_headspy).
+[example guide](idf/examples/esp32s3_hmi_devkit/README.md#how-the-heads-are-merged-main_merge_headspy).
 
 ## Measured performance
 

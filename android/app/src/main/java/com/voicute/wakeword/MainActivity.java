@@ -2,6 +2,7 @@ package com.voicute.wakeword;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -419,6 +420,8 @@ public class MainActivity extends AppCompatActivity implements AudioCapture.List
         detectText.setAlpha(1f);
         counterText.setText(String.format(Locale.US, "已检测到 %d 次", detection.count));
         addLogEntry(word, prob);
+        stopListening();
+        launchTermuxTest();
 
         // Persistent log
         try {
@@ -435,6 +438,26 @@ public class MainActivity extends AppCompatActivity implements AudioCapture.List
         mainHandler.postDelayed(() -> {
             detectText.animate().alpha(0f).setDuration(400).start();
         }, 1200);
+    }
+
+
+    private void launchTermuxTest() {
+        try {
+            Intent intent = new Intent();
+            intent.setClassName("com.termux",
+                    "com.termux.app.RunCommandService");
+            intent.setAction("com.termux.RUN_COMMAND");
+            intent.putExtra("com.termux.RUN_COMMAND_PATH",
+                    "/data/data/com.termux/files/usr/bin/bash");
+            intent.putExtra("com.termux.RUN_COMMAND_ARGUMENTS",
+                    new String[]{"-lc", "termux-tts-speak 'Hello Boss, Jarvis connected'"});
+            intent.putExtra("com.termux.RUN_COMMAND_WORKDIR",
+                    "/data/data/com.termux/files/home");
+            intent.putExtra("com.termux.RUN_COMMAND_BACKGROUND", true);
+            startService(intent);
+        } catch (Exception e) {
+            Log.e(TAG, "Termux launch failed", e);
+        }
     }
 
     private void addLogEntry(String word, float prob) {

@@ -450,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements AudioCapture.List
             intent.putExtra("com.termux.RUN_COMMAND_PATH",
                     "/data/data/com.termux/files/usr/bin/bash");
             intent.putExtra("com.termux.RUN_COMMAND_ARGUMENTS",
-                    new String[]{"-lc", "termux-tts-speak 'Hello Boss, Jarvis connected'"});
+                    new String[]{"-lc", "cd /data/data/com.termux/files/home/jarvis && python jarvis.py"});
             intent.putExtra("com.termux.RUN_COMMAND_WORKDIR",
                     "/data/data/com.termux/files/home");
             intent.putExtra("com.termux.RUN_COMMAND_BACKGROUND", true);
